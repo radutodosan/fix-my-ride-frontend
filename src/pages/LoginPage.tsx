@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { clientLogin } from '../services/ClientAuthService';
-import { mechanicLogin } from '../services/MechanicAuthService';
+import { clientLogin, mechanicLogin } from '../services/AuthService';
 import { useNavigate } from 'react-router-dom';
 import { handleApiError } from '../utils/handleApiError';
 import { useAlert } from '../contexts/AlertContext';
@@ -37,7 +36,8 @@ const LoginPage: React.FC = () => {
       showSuccess("Login succesful!");
       navigate("/");
 
-    } catch (err: unknown) {
+    }
+    catch (err: unknown) {
       const message = handleApiError(err);
       showError(message);
     }

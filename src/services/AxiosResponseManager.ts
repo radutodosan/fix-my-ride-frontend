@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ApiServiceType } from "../types/apiServiceType";
+import { ApiServiceType } from "../types/ApiServiceType";
 
 // services mapping
 const BASE_URLS: Record<ApiServiceType, string> = {
@@ -21,7 +21,7 @@ export const createAxiosResponseManager = (serviceType: ApiServiceType) => {
 
       const apiResponse = response.data as { success: boolean; message: string; data: unknown };
 
-      if (!apiResponse.success) {
+      if (apiResponse.success == false) {
         console.error(`[API ERROR - ${serviceType}]`, apiResponse.message);
         return Promise.reject(new Error(apiResponse.message || "Unexpected API Error"));
       }
@@ -29,7 +29,7 @@ export const createAxiosResponseManager = (serviceType: ApiServiceType) => {
       return response;
     },
     (error) => {
-      console.error(`[NETWORK ERROR - ${serviceType}]`, error.response?.data || error.message);
+      console.error(`[API ERROR - ${serviceType}]`, error.response?.data || error.message);
       return Promise.reject(error);
     }
   );

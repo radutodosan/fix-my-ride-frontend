@@ -1,4 +1,8 @@
 
+import "bootstrap/dist/css/bootstrap.min.css";
+import './index.css';
+
+
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
@@ -12,10 +16,8 @@ import MechanicProfilePage from "./pages/MechanicProfilePage";
 import LoginPage from "./pages/LoginPage";
 import MainLayout from "./layouts/MainLayout";
 import { AlertProvider } from "./contexts/AlertContext";
-
-import "bootstrap/dist/css/bootstrap.min.css";
-import './index.css';
 import ProtectedRoute from './components/ProtectedRoute';
+import SignUpPage from './pages/SignUpPage';
 
 
 const router = createBrowserRouter([
@@ -27,6 +29,10 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <HomePage />
+      },
+      {
+        path: 'signup',
+        element: <SignUpPage />
       },
       {
         path: 'login',

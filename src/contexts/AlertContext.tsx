@@ -49,11 +49,14 @@ export const AlertProvider: React.FC<{ children: ReactNode }> = ({ children }) =
               right: '20px',
               padding: '10px 20px',
               borderRadius: '5px',
+              boxShadow: '0px 3px 10px 0px rgba(0,0,0,0.75)',
+              WebkitBoxShadow: '0px 3px 10px 0px rgba(0,0,0,0.75)',
+              MozBoxShadow: '0px 3px 10px 0px rgba(0,0,0,0.75)',
               backgroundColor:
                 alert.type === 'success'
-                  ? 'green'
+                  ? '#4ba55f'
                   : alert.type === 'error'
-                    ? 'red'
+                    ? '#DC3545'
                     : '#6c757d',
               color: 'white',
               fontWeight: 'bold',

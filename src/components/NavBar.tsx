@@ -53,15 +53,22 @@ const Navbar: React.FC = () => {
           </>
         )}
 
-        {accessToken ? (
-          <button onClick={handleLogout} style={{ background: 'white', color: '#333', padding: '5px 10px', borderRadius: '5px' }}>
-            Logout
-          </button>
-        ) : (
-          <Link to="/login" style={{ background: 'white', color: '#333', padding: '5px 10px', borderRadius: '5px', textDecoration: 'none' }}>
-            Login
-          </Link>
-        )}
+        {accessToken ?
+          (
+            <button onClick={handleLogout} style={{ background: 'white', color: '#333', padding: '5px 10px', borderRadius: '5px' }}>
+              Logout
+            </button>
+          ) :
+          (
+            <>
+              <Link to="/login" style={{ background: 'white', color: '#333', padding: '5px 10px', borderRadius: '5px', textDecoration: 'none' }}>
+                Login
+              </Link>
+              <Link to="/signup" style={{ background: 'white', color: '#333', padding: '5px 10px', borderRadius: '5px', textDecoration: 'none' }}>
+                Sign Up
+              </Link>
+            </>
+          )}
       </div>
     </nav>
   );
