@@ -4,16 +4,13 @@ import { getClientCars, addCar, deleteCar, updateCar } from '../services/CarsSer
 import { useAlert } from '../contexts/AlertContext';
 import { Car } from '../types/Car';
 import { handleApiError } from '../utils/handleApiError';
+import { UserDetails } from '../types/UserDetails';
 
-interface ClientDetails {
-  username: string;
-  email: string;
-}
 
 const ClientProfilePage: React.FC = () => {
   const { showError, showSuccess } = useAlert();
 
-  const [client, setClient] = useState<ClientDetails | null>(null);
+  const [client, setClient] = useState<UserDetails | null>(null);
   const [cars, setCars] = useState<Car[]>([]);
   const [showAddCarForm, setShowAddCarForm] = useState(false);
 
