@@ -7,25 +7,47 @@ import ClientAppointmentsPage from "./pages/ClientAppointmentsPage";
 import ClientProfilePage from "./pages/ClientProfilePage";
 import NotFoundPage from "./pages/NotFoundPage";
 import ClientMechanicsPage from "./pages/ClientMechanicsPage";
+import MechanicAppointmentsPage from "./pages/MechanicAppointmentsPage";
+import MechanicProfilePage from "./pages/MechanicProfilePage";
+import LoginPage from "./pages/LoginPage";
+import MainLayout from "./layouts/MainLayout";
 
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <HomePage />,
-    errorElement: <NotFoundPage />
-  },
-  {
-    path: 'client/appointments',
-    element: <ClientAppointmentsPage />
-  },
-  {
-    path: 'client/profile/:username',
-    element: <ClientProfilePage />
-  },
-  {
-    path: 'client/mechanics',
-    element: <ClientMechanicsPage />
+    element: <MainLayout />,
+    children: [
+      {
+        path: '/',
+        element: <HomePage />,
+        errorElement: <NotFoundPage />
+      },
+      {
+          path: 'login',
+          element: <LoginPage />
+      },
+      {
+        path: 'client/appointments',
+        element: <ClientAppointmentsPage />
+      },
+      {
+        path: 'client/profile/:username',
+        element: <ClientProfilePage />
+      },
+      {
+        path: 'client/mechanics',
+        element: <ClientMechanicsPage />
+      },
+      {
+        path: 'mechanic/appointments',
+        element: <MechanicAppointmentsPage />
+      },
+      {
+        path: 'mechanic/profile/:username',
+        element: <MechanicProfilePage />
+      },
+    ]
   }
 ]);
 
