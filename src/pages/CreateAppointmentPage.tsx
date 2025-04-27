@@ -18,17 +18,17 @@ const CreateAppointmentPage: React.FC = () => {
   const { showSuccess, showError } = useAlert();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchCars = async () => {
-      try {
-        const data = await getClientCars();
-        setCars(data);
-      } catch (error) {
-        console.error(error);
-        showError('Failed to load cars.');
-      }
-    };
+  const fetchCars = async () => {
+    try {
+      const data = await getClientCars();
+      setCars(data);
+    } catch (error) {
+      console.error(error);
+      showError('Failed to load cars.');
+    }
+  };
 
+  useEffect(() => {
     fetchCars();
   }, []);
 

@@ -1,24 +1,41 @@
 import React, { useEffect, useState } from 'react';
-import { getClientAppointments } from '../services/AppointmentsService';
+import { getClientAppointments, cancelAppointmentAsClient } from '../services/AppointmentsService';
 import { useAlert } from '../contexts/AlertContext';
 import { Appointment } from '../types/Appointment';
 import { Link } from 'react-router-dom';
+import { handleApiError } from '../utils/handleApiError';
 
 const ClientAppointmentsPage: React.FC = () => {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
-  const { showError } = useAlert();
+  const { showSuccess, showError } = useAlert();
+
+  const fetchAppointments = async () => {
+    try {
+      const data = await getClientAppointments();
+      setAppointments(data);
+    } catch (error) {
+      console.error(error);
+      showError('Failed to load appointments.');
+    }
+  };
+
+  const handleCancelAppointment = async (appointmentId: number) => {
+    if (!window.confirm('Are you sure you want to cancel this appointment?')) {
+      return;
+    }
+
+    try {
+      await cancelAppointmentAsClient(appointmentId);
+      showSuccess('Appointment cancelled successfully!');
+      fetchAppointments(); // 🔥 Refacem lista
+    } catch (error) {
+      console.error(error);
+      const message = handleApiError(error);
+      showError(message);
+    }
+  };
 
   useEffect(() => {
-    const fetchAppointments = async () => {
-      try {
-        const data = await getClientAppointments();
-        setAppointments(data);
-      } catch (error) {
-        console.error(error);
-        showError('Failed to load appointments.');
-      }
-    };
-
     fetchAppointments();
   }, []);
 
@@ -37,17 +54,32 @@ const ClientAppointmentsPage: React.FC = () => {
         <p>No appointments found.</p>
       ) : (
         <ul style={{ listStyle: 'none', padding: 0 }}>
-          {appointments.map((appointment, index) => (
-            <li key={index} style={{ marginBottom: '15px', padding: '15px', border: '1px solid #ccc', borderRadius: '8px' }}>
-              <p><strong>Title:</strong> {appointment.title}</p>
+          {appointments.map((appointment) => (
+            <div key={appointment.id} style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '10px', borderRadius: '8px', position: 'relative' }}>
+              <h4>{appointment.title}</h4>
               <p><strong>Description:</strong> {appointment.description}</p>
               <p><strong>Mechanic:</strong> {appointment.mechanicUsername}</p>
               <p><strong>Car:</strong> {appointment.carDetails}</p>
-              <p><strong>Appointment Date:</strong> {appointment.appointmentDate}</p>
-              <p><strong>Appointment Time:</strong> {appointment.appointmentTime}</p>
-              <p><strong>Created At:</strong> {new Date(appointment.date).toLocaleString()}</p>
+              <p><strong>Date:</strong> {appointment.appointmentDate}</p>
+              <p><strong>Time:</strong> {appointment.appointmentTime}</p>
               <p><strong>Status:</strong> {appointment.status}</p>
-            </li>
+
+              {appointment.status !== 'CANCELLED' && (
+                <button
+                  onClick={() => handleCancelAppointment(appointment.id)}
+                  style={{
+                    marginTop: '10px',
+                    backgroundColor: '#dc3545',
+                    color: 'white',
+                    border: 'none',
+                    padding: '8px 16px',
+                    borderRadius: '5px'
+                  }}
+                >
+                  Cancel
+                </button>
+              )}
+            </div>
           ))}
         </ul>
       )}

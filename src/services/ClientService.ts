@@ -32,3 +32,8 @@ export const changeEmail = async (data: ChangeEmailRequest) => {
   const response = await clientPrivateApi.post('/clients/details/change-email', data);
   return response.data.message;
 };
+
+export const getAllMechanics = async () => {
+  const response = await clientPrivateApi.get('/client/mechanics');
+  return response.data.data;
+};

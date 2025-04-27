@@ -1,22 +1,33 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAlert } from '../contexts/AlertContext';
+import { clientLogout, mechanicLogout } from '../services/AuthService';
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
-  const { showInfo } = useAlert();
+  const { showError, showInfo } = useAlert();
 
   const accessToken = localStorage.getItem('accessToken');
   const userType = localStorage.getItem('userType');
   const username = localStorage.getItem('username');
 
-
-  const handleLogout = () => {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('userType');
-    showInfo("Logged out succesfully!");
-    navigate('/');
+  const handleLogout = async () => {
+    try {
+      if (userType === 'client') {
+        await clientLogout();
+      } else if (userType === 'mechanic') {
+        await mechanicLogout();
+      }
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('userType');
+      showInfo("Logged out succesfully!");
+      navigate('/');
+    } catch (error) {
+      console.error(error);
+      showError('Logout failed.');
+    }
   };
+
 
   return (
     <nav style={{

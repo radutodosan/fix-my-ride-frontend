@@ -1,11 +1,11 @@
-import { User } from "./User";
+import { UserDetails } from "./UserDetails";
 
 export interface JwtResponseClient {
   token: string;
-  client: User;
+  client: UserDetails;
 }
 
 export interface JwtResponseMechanic {
   token: string;
-  mechanic: User
+  mechanic: UserDetails
 }

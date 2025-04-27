@@ -1,4 +1,5 @@
 export interface Appointment {
+  id: number
   userUsername: string;
   mechanicUsername: string;
   title: string;

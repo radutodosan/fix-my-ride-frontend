@@ -12,6 +12,7 @@ interface SignupData {
   password: string;
 }
 
+// Signup
 export const clientSignup = async (signupData: SignupData) => {
   const response = await CLIENT_URL.post('/auth/clients/signup', signupData);
   return response.data.data;
@@ -22,6 +23,7 @@ export const mechanicSignup = async (signupData: SignupData) => {
   return response.data.data;
 };
 
+// Login
 export const clientLogin = async (loginData: LoginRequest): Promise<JwtResponseClient> => {
   const response = await CLIENT_URL.post("/auth/clients/login", loginData);
   return response.data.data;
@@ -30,4 +32,13 @@ export const clientLogin = async (loginData: LoginRequest): Promise<JwtResponseC
 export const mechanicLogin = async (loginData: LoginRequest): Promise<JwtResponseMechanic> => {
   const response = await MECHANIC_URL.post("/auth/mechanics/login", loginData);
   return response.data.data;
+};
+
+// Logout
+export const clientLogout = async (): Promise<void> => {
+  await CLIENT_URL.post('/auth/clients/logout');
+};
+
+export const mechanicLogout = async (): Promise<void> => {
+  await MECHANIC_URL.post('/auth/mechanics/logout');
 };
