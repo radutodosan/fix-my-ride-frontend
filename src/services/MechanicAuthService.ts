@@ -1,17 +1,13 @@
-import axios from "axios";
+import { createAxiosResponseManager } from "./AxiosResponseManager";
+import { ApiServiceType } from "../types/apiServiceType";
+import { LoginRequest } from "../types/LoginRequest";
+import { JwtResponseMechanic } from "../types/JwtResponseMechanic";
 
-const MECHANIC_API_URL = "http://localhost:8082"; // backend mechanics service
+const CLIENT_URL = createAxiosResponseManager(ApiServiceType.MECHANIC);
 
-interface LoginRequest {
-  username: string;
-  password: string;
-}
 
-interface LoginResponse {
-  accessToken: string;
-}
 
-export const mechanicLogin = async (loginData: LoginRequest): Promise<LoginResponse> => {
-  const response = await axios.post(`${MECHANIC_API_URL}/auth/mechanics/login`, loginData);
+export const mechanicLogin = async (loginData: LoginRequest): Promise<JwtResponseMechanic> => {
+  const response = await CLIENT_URL.post("/auth/mechanics/login", loginData);
   return response.data.data;
 };

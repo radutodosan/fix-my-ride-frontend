@@ -1,4 +1,4 @@
-import "bootstrap/dist/css/bootstrap.min.css";
+
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
@@ -11,41 +11,61 @@ import MechanicAppointmentsPage from "./pages/MechanicAppointmentsPage";
 import MechanicProfilePage from "./pages/MechanicProfilePage";
 import LoginPage from "./pages/LoginPage";
 import MainLayout from "./layouts/MainLayout";
+import { AlertProvider } from "./contexts/AlertContext";
+
+import "bootstrap/dist/css/bootstrap.min.css";
+import './index.css';
+import ProtectedRoute from './components/ProtectedRoute';
 
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <MainLayout />,
+    errorElement: <NotFoundPage />,
     children: [
       {
         path: '/',
-        element: <HomePage />,
-        errorElement: <NotFoundPage />
+        element: <HomePage />
       },
       {
-          path: 'login',
-          element: <LoginPage />
+        path: 'login',
+        element: <LoginPage />
       },
       {
         path: 'client/appointments',
-        element: <ClientAppointmentsPage />
+        element:
+          <ProtectedRoute allowedUserType="client">
+            <ClientAppointmentsPage />
+          </ProtectedRoute>
       },
       {
         path: 'client/profile/:username',
-        element: <ClientProfilePage />
+        element:
+          <ProtectedRoute allowedUserType="client">
+            <ClientProfilePage />
+          </ProtectedRoute>
       },
       {
         path: 'client/mechanics',
-        element: <ClientMechanicsPage />
+        element:
+          <ProtectedRoute allowedUserType="client">
+            <ClientMechanicsPage />
+          </ProtectedRoute>
       },
       {
         path: 'mechanic/appointments',
-        element: <MechanicAppointmentsPage />
+        element:
+          <ProtectedRoute allowedUserType="mechanic">
+            <MechanicAppointmentsPage />
+          </ProtectedRoute>
       },
       {
         path: 'mechanic/profile/:username',
-        element: <MechanicProfilePage />
+        element:
+          <ProtectedRoute allowedUserType="mechanic">
+            <MechanicProfilePage />
+          </ProtectedRoute>
       },
     ]
   }
@@ -53,6 +73,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <RouterProvider router={router}></RouterProvider>
+    <AlertProvider>
+      <RouterProvider router={router} />
+    </AlertProvider>
   </StrictMode>,
 )

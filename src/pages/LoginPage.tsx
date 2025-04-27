@@ -2,13 +2,17 @@ import React, { useState } from 'react';
 import { clientLogin } from '../services/ClientAuthService';
 import { mechanicLogin } from '../services/MechanicAuthService';
 import { useNavigate } from 'react-router-dom';
+import { handleApiError } from '../utils/handleApiError';
+import { useAlert } from '../contexts/AlertContext';
 
 const LoginPage: React.FC = () => {
+  const { showSuccess, showError } = useAlert();
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [userType, setUserType] = useState<'client' | 'mechanic'>('client');
   const [error, setError] = useState('');
-  
+
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -18,17 +22,24 @@ const LoginPage: React.FC = () => {
     try {
       if (userType === 'client') {
         const response = await clientLogin({ username, password });
-        localStorage.setItem('accessToken', response.accessToken);
-        navigate("/");
-      } else {
+        localStorage.setItem('accessToken', response.token);
+        localStorage.setItem('username', response.client.username);
+
+        console.log("Client: " + localStorage.getItem("accessToken"));
+      } else if (userType === 'mechanic') {
         const response = await mechanicLogin({ username, password });
-        localStorage.setItem('accessToken', response.accessToken);
-        navigate("/");
+        localStorage.setItem('accessToken', response.token);
+        console.log("Mechanic: " + localStorage.getItem("accessToken"));
+        localStorage.setItem('username', response.mechanic.username);
       }
-      
-    } catch (err: any) {
-      console.error(err);
-      setError('Login failed. Please check your credentials.');
+      localStorage.setItem('userType', userType);
+
+      showSuccess("Login succesful!");
+      navigate("/");
+
+    } catch (err: unknown) {
+      const message = handleApiError(err);
+      showError(message);
     }
   };
 

@@ -1,17 +1,12 @@
-import axios from "axios";
+import { createAxiosResponseManager } from "./AxiosResponseManager";
+import { ApiServiceType } from "../types/apiServiceType";
+import { LoginRequest } from "../types/LoginRequest";
+import { JwtResponseClient } from "../types/JwtResponseClient";
 
-const CLIENT_API_URL = "http://localhost:8081"; // backend users service
+const CLIENT_URL = createAxiosResponseManager(ApiServiceType.CLIENT);
 
-interface LoginRequest {
-    username: string;
-  password: string;
-}
 
-interface LoginResponse {
-  accessToken: string;
-}
-
-export const clientLogin = async (loginData: LoginRequest): Promise<LoginResponse> => {
-  const response = await axios.post(`${CLIENT_API_URL}/auth/clients/login`, loginData);
+export const clientLogin = async (loginData: LoginRequest): Promise<JwtResponseClient> => {
+  const response = await CLIENT_URL.post("/auth/clients/login", loginData);
   return response.data.data;
 };
