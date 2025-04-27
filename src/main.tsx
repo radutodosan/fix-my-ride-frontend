@@ -18,6 +18,7 @@ import MainLayout from "./layouts/MainLayout";
 import { AlertProvider } from "./contexts/AlertContext";
 import ProtectedRoute from './components/ProtectedRoute';
 import SignUpPage from './pages/SignUpPage';
+import CreateAppointmentPage from "./pages/CreateAppointmentPage";
 
 
 const router = createBrowserRouter([
@@ -43,6 +44,13 @@ const router = createBrowserRouter([
         element:
           <ProtectedRoute allowedUserType="client">
             <ClientAppointmentsPage />
+          </ProtectedRoute>
+      },
+      {
+        path: 'client/appointments/create',
+        element:
+          <ProtectedRoute allowedUserType="client">
+            <CreateAppointmentPage />
           </ProtectedRoute>
       },
       {

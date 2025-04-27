@@ -1,10 +1,10 @@
-import { createAxiosResponseManager } from './AxiosResponseManager';
-import { ApiServiceType } from '../types/ApiServiceType';
+import { createAxiosPublicManager } from './AxiosManager';
+import { ApiServiceType } from '../types/apiServiceType';
 import { LoginRequest } from "../types/LoginRequest";
 import { JwtResponseClient, JwtResponseMechanic } from "../types/JwtResponse";
 
-const CLIENT_URL = createAxiosResponseManager(ApiServiceType.CLIENT);
-const MECHANIC_URL = createAxiosResponseManager(ApiServiceType.MECHANIC);
+const CLIENT_URL = createAxiosPublicManager(ApiServiceType.CLIENT);
+const MECHANIC_URL = createAxiosPublicManager(ApiServiceType.MECHANIC);
 
 interface SignupData {
   username: string;
