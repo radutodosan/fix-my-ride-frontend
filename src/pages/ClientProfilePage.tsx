@@ -28,7 +28,6 @@ const ClientProfilePage: React.FC = () => {
   const [newPassword, setNewPassword] = useState('');
 
   // Change email
-
   const [passwordForEmail, setPasswordForEmail] = useState('');
   const [newEmail, setNewEmail] = useState('');
 
