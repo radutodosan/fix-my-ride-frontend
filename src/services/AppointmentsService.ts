@@ -18,3 +18,14 @@ export const cancelAppointmentAsClient = async (appointmentId: number) => {
   const response = await APPOINTMENTS_URL.patch(`/appointments/client/cancel/${appointmentId}`);
   return response.data.data;
 };
+
+
+export const getMechanicAppointments = async () => {
+  const response = await APPOINTMENTS_URL.get('/appointments/mechanic/view-appointments');
+  return response.data.data;
+};
+
+export const updateAppointmentStatusAsMechanic = async (appointmentId: number, status: 'CONFIRMED' | 'CANCELLED') => {
+  const response = await APPOINTMENTS_URL.patch(`/appointments/mechanic/update-status/${appointmentId}`, { status });
+  return response.data.data;
+};

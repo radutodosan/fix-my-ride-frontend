@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { changeEmail, changePassword, getClientProfile } from '../services/ClientService';
+import { changeEmail, changePassword, getClientProfile } from '../services/ClientsService';
 import { getClientCars, addCar, deleteCar, updateCar } from '../services/CarsService';
 import { useAlert } from '../contexts/AlertContext';
 import { Car } from '../types/Car';
@@ -122,7 +122,7 @@ const ClientProfilePage: React.FC = () => {
     setModel(car.model);
     setYear(car.year);
     setLicensePlate(car.licensePlate);
-    setShowAddCarForm(true); // deschide form-ul cu datele precompletate
+    setShowAddCarForm(true);
   };
 
 
@@ -134,7 +134,7 @@ const ClientProfilePage: React.FC = () => {
     try {
       await deleteCar(carId);
       showSuccess('Car deleted successfully!');
-      fetchCars(); // reîncarcă lista după ștergere
+      fetchCars();
     } catch (error) {
       console.error(error);
       showError('Failed to delete car.');

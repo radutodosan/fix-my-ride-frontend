@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAlert } from '../contexts/AlertContext';
-import { getAllMechanics } from '../services/ClientService';
+import { getAllMechanics } from '../services/ClientsService';
 import { UserDetails } from '../types/UserDetails';
 import { handleApiError } from '../utils/handleApiError';
 

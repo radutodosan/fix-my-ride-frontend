@@ -27,7 +27,7 @@ const ClientAppointmentsPage: React.FC = () => {
     try {
       await cancelAppointmentAsClient(appointmentId);
       showSuccess('Appointment cancelled successfully!');
-      fetchAppointments(); // 🔥 Refacem lista
+      fetchAppointments();
     } catch (error) {
       console.error(error);
       const message = handleApiError(error);

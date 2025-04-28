@@ -2,15 +2,10 @@ import { createAxiosPublicManager } from './AxiosManager';
 import { ApiServiceType } from '../types/apiServiceType';
 import { LoginRequest } from "../types/LoginRequest";
 import { JwtResponseClient, JwtResponseMechanic } from "../types/JwtResponse";
+import { SignupData } from '../types/SignupRequest';
 
 const CLIENT_URL = createAxiosPublicManager(ApiServiceType.CLIENT);
 const MECHANIC_URL = createAxiosPublicManager(ApiServiceType.MECHANIC);
-
-interface SignupData {
-  username: string;
-  email: string;
-  password: string;
-}
 
 // Signup
 export const clientSignup = async (signupData: SignupData) => {
@@ -41,4 +36,15 @@ export const clientLogout = async (): Promise<void> => {
 
 export const mechanicLogout = async (): Promise<void> => {
   await MECHANIC_URL.post('/auth/mechanics/logout');
+};
+
+// Refresh Tokens
+export const refreshClientToken = async () => {
+  const response = await CLIENT_URL.post('/auth/clients/refresh-token');
+  return response.data.data.accessToken;
+};
+
+export const refreshMechanicToken = async () => {
+  const response = await MECHANIC_URL.post('/auth/mechanics/refresh-token');
+  return response.data.data.accessToken;
 };
