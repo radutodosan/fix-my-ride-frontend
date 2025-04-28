@@ -85,8 +85,8 @@ export const createAxiosPrivateManager = (serviceType: ApiServiceType) => {
           return instance(originalRequest);
 
         } catch (refreshError) {
-          console.error('Refresh token failed, logging out', refreshError);
-          clearAuthData();
+          console.error('Refreshing access token failed, logging out', refreshError);
+          clearAuthData(); // cookie deletion not needed because refresh token is expired in this situation
           window.location.href = '/login'; // redirect to login
           return Promise.reject(refreshError);
         }
