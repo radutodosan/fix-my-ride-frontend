@@ -5,7 +5,7 @@ import { useAlert } from '../contexts/AlertContext';
 import { handleApiError } from '../utils/handleApiError';
 
 const SignUpPage: React.FC = () => {
-  const [userType, setUserType] = useState<'client' | 'mechanic'>('client');
+  const [userType, setUserType] = useState<UserType.CLIENT | UserType.MECHANIC>(UserType.CLIENT);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -24,7 +24,7 @@ const SignUpPage: React.FC = () => {
     try {
       const signupData = { username, email, password };
 
-      if (userType === 'client') {
+      if (userType === UserType.CLIENT) {
         await clientSignup(signupData);
       } else {
         await mechanicSignup(signupData);
@@ -46,7 +46,7 @@ const SignUpPage: React.FC = () => {
       <form onSubmit={handleSignup}>
         <div>
           <label>User Type:</label>
-          <select value={userType} onChange={(e) => setUserType(e.target.value as 'client' | 'mechanic')}>
+          <select value={userType} onChange={(e) => setUserType(e.target.value as UserType.CLIENT | UserType.MECHANIC)}>
             <option value="client">Client</option>
             <option value="mechanic">Mechanic</option>
           </select>

@@ -3,9 +3,11 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import { getClientProfile } from '../services/ClientsService';
 import { getMechanicProfile } from '../services/MechanicsService';
 import { refreshClientToken, refreshMechanicToken } from '../services/AuthService';
+import { getAccessToken, getUserType } from '../utils/storageUtils';
+import { UserType } from '../types/userType';
 
 interface ProtectedRouteProps {
-  allowedUserType: 'client' | 'mechanic';
+  allowedUserType: UserType.CLIENT | UserType.MECHANIC;
   children: React.ReactNode;
 }
 
@@ -13,13 +15,13 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedUserType, childr
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const navigate = useNavigate();
 
-  const token = localStorage.getItem('accessToken');
-  const userType = localStorage.getItem('userType');
+  const token = getAccessToken()
+  const userType = getUserType();
 
   const validateProfile = async (userType: string | null) => {
-    if (userType === 'client') {
+    if (userType === UserType.CLIENT) {
       await getClientProfile();
-    } else if (userType === 'mechanic') {
+    } else if (userType === UserType.MECHANIC) {
       await getMechanicProfile();
     } else {
       throw new Error('Unknown user type');
@@ -42,9 +44,9 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedUserType, childr
         if (error.response.status === 401 && error.response.data.message === "Invalid or expired token") {
           try {
             let newAccessToken = '';
-            if (userType === 'client') {
+            if (userType === UserType.CLIENT) {
               newAccessToken = await refreshClientToken();
-            } else if (userType === 'mechanic') {
+            } else if (userType === UserType.MECHANIC) {
               newAccessToken = await refreshMechanicToken();
             } else {
               throw new Error('Unknown user type for refresh');

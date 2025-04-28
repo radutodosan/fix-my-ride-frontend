@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { ApiServiceType } from '../types/apiServiceType';
+import { getAccessToken } from '../utils/storageUtils';
 
 const BASE_URLS: Record<ApiServiceType, string> = {
   [ApiServiceType.CLIENT]: 'http://localhost:8081',
@@ -35,7 +36,7 @@ export const createAxiosPrivateManager = (serviceType: ApiServiceType) => {
 
   instance.interceptors.request.use(
     (config) => {
-      const token = localStorage.getItem('accessToken');
+      const token = getAccessToken();
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }

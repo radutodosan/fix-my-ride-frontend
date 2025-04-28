@@ -2,24 +2,25 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAlert } from '../contexts/AlertContext';
 import { clientLogout, mechanicLogout } from '../services/AuthService';
+import { clearAuthData, getAccessToken, getUsername, getUserType } from '../utils/storageUtils';
+import { UserType } from '../types/userType';
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const { showError, showInfo } = useAlert();
 
-  const accessToken = localStorage.getItem('accessToken');
-  const userType = localStorage.getItem('userType');
-  const username = localStorage.getItem('username');
+  const accessToken = getAccessToken();
+  const userType = getUserType();
+  const username = getUsername();
 
   const handleLogout = async () => {
     try {
-      if (userType === 'client') {
+      if (userType === UserType.CLIENT) {
         await clientLogout();
-      } else if (userType === 'mechanic') {
+      } else if (userType === UserType.MECHANIC) {
         await mechanicLogout();
       }
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('userType');
+      clearAuthData();
       showInfo("Logged out succesfully!");
       navigate('/');
     } catch (error) {
@@ -47,14 +48,14 @@ const Navbar: React.FC = () => {
       <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
         {accessToken && (
           <>
-            {userType === 'client' && (
+            {userType === UserType.CLIENT && (
               <>
                 <Link to="/client/appointments" style={{ color: 'white', textDecoration: 'none' }}>Appointments</Link>
                 <Link to={`/client/profile/${username}`} style={{ color: 'white', textDecoration: 'none' }}>Profile</Link>
                 <Link to="/client/mechanics" style={{ color: 'white', textDecoration: 'none' }}>Mechanics</Link>
               </>
             )}
-            {userType === 'mechanic' && (
+            {userType === UserType.MECHANIC && (
               <>
                 <Link to="/mechanic/appointments" style={{ color: 'white', textDecoration: 'none' }}>Appointments</Link>
                 <Link to={`/mechanic/profile/${username}`} style={{ color: 'white', textDecoration: 'none' }}>Profile</Link>

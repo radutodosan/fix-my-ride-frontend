@@ -3,13 +3,15 @@ import { clientLogin, mechanicLogin } from '../services/AuthService';
 import { useNavigate } from 'react-router-dom';
 import { handleApiError } from '../utils/handleApiError';
 import { useAlert } from '../contexts/AlertContext';
+import { getAccessToken, saveAccessToken, saveUsername, saveUserType } from '../utils/storageUtils';
+import { UserType } from '../types/userType';
 
 const LoginPage: React.FC = () => {
   const { showSuccess, showError } = useAlert();
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [userType, setUserType] = useState<'client' | 'mechanic'>('client');
+  const [userType, setUserType] = useState<UserType.CLIENT | UserType.MECHANIC>(UserType.CLIENT);
   const [error, setError] = useState('');
 
   const navigate = useNavigate();
@@ -19,19 +21,19 @@ const LoginPage: React.FC = () => {
     setError('');
 
     try {
-      if (userType === 'client') {
+      if (userType === UserType.CLIENT) {
         const response = await clientLogin({ username, password });
-        localStorage.setItem('accessToken', response.token);
-        localStorage.setItem('username', response.client.username);
+        saveAccessToken(response.token);
+        saveUsername(response.client.username);
 
-        console.log("Client: " + localStorage.getItem("accessToken"));
-      } else if (userType === 'mechanic') {
+        console.log("Client: " + getAccessToken());
+      } else if (userType === UserType.MECHANIC) {
         const response = await mechanicLogin({ username, password });
-        localStorage.setItem('accessToken', response.token);
-        console.log("Mechanic: " + localStorage.getItem("accessToken"));
-        localStorage.setItem('username', response.mechanic.username);
+        saveAccessToken(response.token);
+        console.log("Mechanic: " + getAccessToken());
+        saveUsername(response.mechanic.username);
       }
-      localStorage.setItem('userType', userType);
+      saveUserType(userType);
 
       showSuccess("Login succesful!");
       navigate("/");
@@ -74,7 +76,7 @@ const LoginPage: React.FC = () => {
           <label>User Type:</label><br />
           <select
             value={userType}
-            onChange={(e) => setUserType(e.target.value as 'client' | 'mechanic')}
+            onChange={(e) => setUserType(e.target.value as UserType.CLIENT | UserType.MECHANIC)}
             required
           >
             <option value="client">Client</option>
