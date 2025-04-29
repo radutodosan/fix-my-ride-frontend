@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { clientSignup, mechanicSignup } from '../services/AuthService';
 import { useAlert } from '../contexts/AlertContext';
 import { handleApiError } from '../utils/handleApiError';
+import { UserType } from '../types/userType';
 
 const SignUpPage: React.FC = () => {
   const [userType, setUserType] = useState<UserType.CLIENT | UserType.MECHANIC>(UserType.CLIENT);
@@ -47,8 +48,8 @@ const SignUpPage: React.FC = () => {
         <div>
           <label>User Type:</label>
           <select value={userType} onChange={(e) => setUserType(e.target.value as UserType.CLIENT | UserType.MECHANIC)}>
-            <option value="client">Client</option>
-            <option value="mechanic">Mechanic</option>
+            <option value={UserType.CLIENT}>Client</option>
+            <option value={UserType.MECHANIC}>Mechanic</option>
           </select>
         </div>
 

@@ -5,6 +5,7 @@ import { handleApiError } from '../utils/handleApiError';
 import { useAlert } from '../contexts/AlertContext';
 import { getAccessToken, saveAccessToken, saveUsername, saveUserType } from '../utils/storageUtils';
 import { UserType } from '../types/userType';
+import Input from '../components/Input';
 
 const LoginPage: React.FC = () => {
   const { showSuccess, showError } = useAlert();
@@ -52,35 +53,32 @@ const LoginPage: React.FC = () => {
 
         {error && <p style={{ color: 'red' }}>{error}</p>}
 
-        <div>
-          <label>Username:</label><br />
-          <input
-            type="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-        </div>
+        <Input
+          label="Username"
+          type="username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
+
+        <Input
+          label='Password'
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
 
         <div>
-          <label>Password:</label><br />
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-
-        <div>
-          <label>User Type:</label><br />
+          <label>User Type</label><br />
           <select
             value={userType}
             onChange={(e) => setUserType(e.target.value as UserType.CLIENT | UserType.MECHANIC)}
             required
+            style={{ display: 'block', width: '100%', padding: '8px', marginTop: '5px', borderRadius: '4px', border: '1px solid #ccc' }}
           >
-            <option value="client">Client</option>
-            <option value="mechanic">Mechanic</option>
+            <option value={UserType.CLIENT} >Client</option>
+            <option value={UserType.MECHANIC}>Mechanic</option>
           </select>
         </div>
 

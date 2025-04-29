@@ -19,6 +19,7 @@ import { AlertProvider } from "./contexts/AlertContext";
 import ProtectedRoute from './components/ProtectedRoute';
 import SignUpPage from './pages/SignUpPage';
 import CreateAppointmentPage from "./pages/CreateAppointmentPage";
+import { UserType } from "./types/userType";
 
 
 const router = createBrowserRouter([
@@ -42,42 +43,42 @@ const router = createBrowserRouter([
       {
         path: 'client/appointments',
         element:
-          <ProtectedRoute allowedUserType="client">
+          <ProtectedRoute allowedUserType={UserType.CLIENT}>
             <ClientAppointmentsPage />
           </ProtectedRoute>
       },
       {
         path: 'client/appointments/create',
         element:
-          <ProtectedRoute allowedUserType="client">
+          <ProtectedRoute allowedUserType={UserType.CLIENT}>
             <CreateAppointmentPage />
           </ProtectedRoute>
       },
       {
         path: 'client/profile/:username',
         element:
-          <ProtectedRoute allowedUserType="client">
+          <ProtectedRoute allowedUserType={UserType.CLIENT}>
             <ClientProfilePage />
           </ProtectedRoute>
       },
       {
         path: 'client/mechanics',
         element:
-          <ProtectedRoute allowedUserType="client">
+          <ProtectedRoute allowedUserType={UserType.CLIENT}>
             <ClientMechanicsPage />
           </ProtectedRoute>
       },
       {
         path: 'mechanic/appointments',
         element:
-          <ProtectedRoute allowedUserType="mechanic">
+          <ProtectedRoute allowedUserType={UserType.MECHANIC}>
             <MechanicAppointmentsPage />
           </ProtectedRoute>
       },
       {
         path: 'mechanic/profile/:username',
         element:
-          <ProtectedRoute allowedUserType="mechanic">
+          <ProtectedRoute allowedUserType={UserType.MECHANIC}>
             <MechanicProfilePage />
           </ProtectedRoute>
       },

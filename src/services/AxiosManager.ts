@@ -1,7 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import { ApiServiceType } from '../types/apiServiceType';
 import { clearAuthData, getAccessToken, getUserType, saveAccessToken } from '../utils/storageUtils';
-import { refreshClientToken, refreshMechanicToken } from './AuthService';
 import { UserType } from '../types/userType';
 
 const BASE_URLS: Record<ApiServiceType, string> = {
@@ -69,9 +68,13 @@ export const createAxiosPrivateManager = (serviceType: ApiServiceType) => {
           let newAccessToken = '';
 
           if (userType === UserType.CLIENT) {
-            newAccessToken = await refreshClientToken();
+            const CLIENT_URL = createAxiosPublicManager(ApiServiceType.CLIENT);
+            const response = await CLIENT_URL.post('/auth/clients/refresh-token');
+            newAccessToken = response.data.data.accessToken;
           } else if (userType === UserType.MECHANIC) {
-            newAccessToken = await refreshMechanicToken();
+            const MECHANIC_URL = createAxiosPublicManager(ApiServiceType.MECHANIC);
+            const response = await MECHANIC_URL.post('/auth/mechanics/refresh-token');
+            newAccessToken = response.data.data.accessToken;
           } else {
             throw new Error('Unknown user type for refresh');
           }
