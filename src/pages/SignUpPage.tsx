@@ -4,6 +4,7 @@ import { clientSignup, mechanicSignup } from '../services/AuthService';
 import { useAlert } from '../contexts/AlertContext';
 import { handleApiError } from '../utils/handleApiError';
 import { UserType } from '../types/userType';
+import Input from '../components/Input';
 
 const SignUpPage: React.FC = () => {
   const [userType, setUserType] = useState<UserType.CLIENT | UserType.MECHANIC>(UserType.CLIENT);
@@ -42,36 +43,54 @@ const SignUpPage: React.FC = () => {
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: '50px auto' }}>
-      <h2>Sign Up</h2>
+    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '50px'  }}>
       <form onSubmit={handleSignup}>
+        <h2>Sign Up</h2>
         <div>
-          <label>User Type:</label>
-          <select value={userType} onChange={(e) => setUserType(e.target.value as UserType.CLIENT | UserType.MECHANIC)}>
+          <label>User Type</label>
+          <select 
+          style={{ display: 'block', width: '100%', padding: '8px', marginTop: '5px', borderRadius: '4px', border: '1px solid #ccc' }}
+          value={userType} 
+          onChange={(e) => setUserType(e.target.value as UserType.CLIENT | UserType.MECHANIC)}>
             <option value={UserType.CLIENT}>Client</option>
             <option value={UserType.MECHANIC}>Mechanic</option>
           </select>
         </div>
 
-        <div>
-          <label>Username:</label>
-          <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
-        </div>
+        <Input
+          label="Username"
+          type="text" 
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        >
+        </Input>
 
-        <div>
-          <label>Email:</label>
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        </div>
+        <Input
+          label="Email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        >
+        </Input>
 
-        <div>
-          <label>Password:</label>
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-        </div>
-
-        <div>
-          <label>Confirm Password:</label>
-          <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
-        </div>
+        <Input
+          label="Password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        >
+        </Input>
+        <Input
+          label="Confirm Password"
+          type="password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          required
+        >
+        </Input>
 
         <button type="submit" style={{ marginTop: '20px' }}>
           Sign Up
