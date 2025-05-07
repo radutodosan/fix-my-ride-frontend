@@ -143,7 +143,7 @@ const ClientProfilePage: React.FC = () => {
   };
 
   return (
-    <div style={{ maxWidth: '700px', margin: '50px auto' }}>
+    <div style={{ maxWidth: '750px', margin: '50px auto' }}>
       <ProfileContainer
         title="Client Profile"
         user={client}
@@ -161,14 +161,16 @@ const ClientProfilePage: React.FC = () => {
         handleChangeEmail={handleChangeEmail}
       />
 
-      <Row className="align-items-center mb-3">
-        <Col><h4>My Cars</h4></Col>
-        <Col className="text-end">
-          <Button onClick={() => setShowAddCarForm(!showAddCarForm)}>
-            {showAddCarForm ? 'Cancel' : 'Add Car'}
-          </Button>
-        </Col>
-      </Row>
+      <div className="border-top mt-4 pt-3">
+        <Row className="align-items-center mb-3">
+          <Col><h4>My Cars</h4></Col>
+          <Col className="text-end">
+            <Button onClick={() => setShowAddCarForm(!showAddCarForm)}>
+              {showAddCarForm ? 'Cancel' : 'Add Car'}
+            </Button>
+          </Col>
+        </Row>
+      </div>
 
       <Collapse in={showAddCarForm}>
         <div>

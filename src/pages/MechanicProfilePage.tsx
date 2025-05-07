@@ -60,23 +60,24 @@ const MechanicProfilePage: React.FC = () => {
   };
 
   return (
-    <ProfileContainer
-      title="Mechanic Profile"
-      user={mechanic}
-      showEditProfile={showEditProfile}
-      onToggleEdit={() => setShowEditProfile(!showEditProfile)}
-      currentPassword={currentPassword}
-      newPassword={newPassword}
-      passwordForEmail={passwordForEmail}
-      newEmail={newEmail}
-      setCurrentPassword={setCurrentPassword}
-      setNewPassword={setNewPassword}
-      setPasswordForEmail={setPasswordForEmail}
-      setNewEmail={setNewEmail}
-      handleChangePassword={handleChangePassword}
-      handleChangeEmail={handleChangeEmail}
-    />
-
+    <div style={{ maxWidth: '750px', margin: '50px auto' }}>
+      <ProfileContainer
+        title="Mechanic Profile"
+        user={mechanic}
+        showEditProfile={showEditProfile}
+        onToggleEdit={() => setShowEditProfile(!showEditProfile)}
+        currentPassword={currentPassword}
+        newPassword={newPassword}
+        passwordForEmail={passwordForEmail}
+        newEmail={newEmail}
+        setCurrentPassword={setCurrentPassword}
+        setNewPassword={setNewPassword}
+        setPasswordForEmail={setPasswordForEmail}
+        setNewEmail={setNewEmail}
+        handleChangePassword={handleChangePassword}
+        handleChangeEmail={handleChangeEmail}
+      />
+    </div>
   );
 };
 
