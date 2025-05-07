@@ -6,6 +6,7 @@ import { Car } from '../types/Car';
 import { handleApiError } from '../utils/handleApiError';
 import { UserDetails } from '../types/UserDetails';
 import ProfileContainer from '../components/ProfileContainer';
+import { Collapse, Card, Form, Row, Col, Button, ListGroup } from 'react-bootstrap';
 
 
 const ClientProfilePage: React.FC = () => {
@@ -160,76 +161,107 @@ const ClientProfilePage: React.FC = () => {
         handleChangeEmail={handleChangeEmail}
       />
 
-      {showAddCarForm && (
-        <form onSubmit={handleAddOrUpdateCar} style={{ marginTop: '20px', marginBottom: '20px', border: '1px solid #ccc', padding: '15px', borderRadius: '8px' }}>
-          <div>
-            <label>Brand:</label>
-            <input type="text" value={brand} onChange={(e) => setBrand(e.target.value)} required />
-          </div>
-          <div>
-            <label>Model:</label>
-            <input type="text" value={model} onChange={(e) => setModel(e.target.value)} required />
-          </div>
-          <div>
-            <label>Year:</label>
-            <input type="number" value={year} onChange={(e) => setYear(Number(e.target.value))} required />
-          </div>
-          <div>
-            <label>License Plate:</label>
-            <input type="text" value={licensePlate} onChange={(e) => setLicensePlate(e.target.value)} required />
-          </div>
-          <button type="submit" style={{ marginTop: '10px' }}>
-            Add Car
-          </button>
-        </form>
-      )}
+      <Row className="align-items-center mb-3">
+        <Col><h4>My Cars</h4></Col>
+        <Col className="text-end">
+          <Button onClick={() => setShowAddCarForm(!showAddCarForm)}>
+            {showAddCarForm ? 'Cancel' : 'Add Car'}
+          </Button>
+        </Col>
+      </Row>
+
+      <Collapse in={showAddCarForm}>
+        <div>
+          <Card className="p-4 mb-4 shadow-sm bg-light">
+            <Form onSubmit={handleAddOrUpdateCar}>
+              <Row className="mb-3">
+                <Col md={6}>
+                  <Form.Group controlId="formBrand">
+                    <Form.Label>Brand</Form.Label>
+                    <Form.Control
+                      type="text"
+                      value={brand}
+                      onChange={(e) => setBrand(e.target.value)}
+                      required
+                    />
+                  </Form.Group>
+                </Col>
+                <Col md={6}>
+                  <Form.Group controlId="formModel">
+                    <Form.Label>Model</Form.Label>
+                    <Form.Control
+                      type="text"
+                      value={model}
+                      onChange={(e) => setModel(e.target.value)}
+                      required
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+
+              <Row className="mb-3">
+                <Col md={6}>
+                  <Form.Group controlId="formYear">
+                    <Form.Label>Year</Form.Label>
+                    <Form.Control
+                      type="number"
+                      value={year}
+                      onChange={(e) => setYear(Number(e.target.value))}
+                      required
+                    />
+                  </Form.Group>
+                </Col>
+                <Col md={6}>
+                  <Form.Group controlId="formLicensePlate">
+                    <Form.Label>License Plate</Form.Label>
+                    <Form.Control
+                      type="text"
+                      value={licensePlate}
+                      onChange={(e) => setLicensePlate(e.target.value)}
+                      required
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+
+              <Button type="submit" variant="success">
+                {editCarId ? 'Update Car' : 'Add Car'}
+              </Button>
+            </Form>
+          </Card>
+        </div>
+      </Collapse>
 
       {cars.length === 0 ? (
         <p>No cars found.</p>
       ) : (
-        <ul style={{ listStyle: 'none', padding: 0 }}>
+        <ListGroup>
           {cars.map((car) => (
-            <li key={car.id} style={{ padding: '10px', marginBottom: '10px', border: '1px solid #ccc', borderRadius: '8px', position: 'relative' }}>
+            <ListGroup.Item key={car.id} className="d-flex justify-content-between align-items-center">
               <div>
-                <p><strong>Brand:</strong> {car.brand}</p>
-                <p><strong>Model:</strong> {car.model}</p>
-                <p><strong>Year:</strong> {car.year}</p>
-                <p><strong>License Plate:</strong> {car.licensePlate}</p>
+                <p className="mb-1"><strong>{car.brand} {car.model}</strong></p>
+                <small>{car.year} – Plate: {car.licensePlate}</small>
               </div>
-              <button
-                onClick={() => handleEditCar(car)}
-                style={{
-                  position: 'absolute',
-                  top: '10px',
-                  right: '70px',
-                  backgroundColor: '#ffc107',
-                  color: 'white',
-                  border: 'none',
-                  padding: '5px 10px',
-                  borderRadius: '5px',
-                }}
-              >
-                Edit
-              </button>
-
-              <button
-                onClick={() => handleDeleteCar(car.id)}
-                style={{
-                  position: 'absolute',
-                  top: '10px',
-                  right: '10px',
-                  backgroundColor: '#dc3545',
-                  color: 'white',
-                  border: 'none',
-                  padding: '5px 10px',
-                  borderRadius: '5px',
-                }}
-              >
-                Delete
-              </button>
-            </li>
+              <div>
+                <Button
+                  variant="warning"
+                  size="sm"
+                  className="me-2"
+                  onClick={() => handleEditCar(car)}
+                >
+                  Edit
+                </Button>
+                <Button
+                  variant="danger"
+                  size="sm"
+                  onClick={() => handleDeleteCar(car.id)}
+                >
+                  Delete
+                </Button>
+              </div>
+            </ListGroup.Item>
           ))}
-        </ul>
+        </ListGroup>
       )}
     </div>
   );
