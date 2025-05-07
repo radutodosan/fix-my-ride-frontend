@@ -3,6 +3,5 @@ export interface CreateAppointmentRequest {
   title: string;
   description: string;
   appointmentDate: string;
-  appointmentTime: string;
   carDetails: string;
 }

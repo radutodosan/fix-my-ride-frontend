@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { getClientAppointments, cancelAppointmentAsClient } from '../services/AppointmentsService';
 import { useAlert } from '../contexts/AlertContext';
 import { Appointment } from '../types/Appointment';
-import { Link } from 'react-router-dom';
 import { handleApiError } from '../utils/handleApiError';
 
 const ClientAppointmentsPage: React.FC = () => {
@@ -41,14 +40,6 @@ const ClientAppointmentsPage: React.FC = () => {
 
   return (
     <div style={{ padding: '20px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h2>My Appointments</h2>
-        <Link to="/client/appointments/create" style={{ textDecoration: 'none' }}>
-          <button style={{ padding: '8px 16px', borderRadius: '5px', backgroundColor: '#28a745', color: 'white', border: 'none' }}>
-            New Appointment
-          </button>
-        </Link>
-      </div>
 
       {appointments.length === 0 ? (
         <p>No appointments found.</p>

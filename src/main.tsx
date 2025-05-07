@@ -48,13 +48,6 @@ const router = createBrowserRouter([
           </ProtectedRoute>
       },
       {
-        path: 'client/appointments/create',
-        element:
-          <ProtectedRoute allowedUserType={UserType.CLIENT}>
-            <CreateAppointmentPage />
-          </ProtectedRoute>
-      },
-      {
         path: 'client/profile/:username',
         element:
           <ProtectedRoute allowedUserType={UserType.CLIENT}>
@@ -66,6 +59,13 @@ const router = createBrowserRouter([
         element:
           <ProtectedRoute allowedUserType={UserType.CLIENT}>
             <ClientMechanicsPage />
+          </ProtectedRoute>
+      },
+      {
+        path: 'client/create-appointment/:mechanicUsername',
+        element:
+          <ProtectedRoute allowedUserType={UserType.CLIENT}>
+            <CreateAppointmentPage />
           </ProtectedRoute>
       },
       {

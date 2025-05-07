@@ -3,10 +3,13 @@ import { useAlert } from '../contexts/AlertContext';
 import { getAllMechanics } from '../services/ClientsService';
 import { UserDetails } from '../types/UserDetails';
 import { handleApiError } from '../utils/handleApiError';
+import { useNavigate } from 'react-router-dom';
+import { Button, Card, Col, Container, Row, Image } from 'react-bootstrap';
 
 const ClientMechanicsPage: React.FC = () => {
   const [mechanics, setMechanics] = useState<UserDetails[]>([]);
   const { showError } = useAlert();
+  const navigate = useNavigate();
 
   const fetchMechanics = async () => {
     try {
@@ -23,22 +26,52 @@ const ClientMechanicsPage: React.FC = () => {
     fetchMechanics();
   }, []);
 
+  const handleBookAppointment = (username: string) => {
+    navigate(`/client/create-appointment/${username}`);
+  };
+
+
   return (
-    <div style={{ maxWidth: '700px', margin: '50px auto' }}>
-      <h2>Available Mechanics</h2>
+    <Container className="mt-5">
+      <h2 className="mb-4 text-center">Available Mechanics</h2>
       {mechanics.length === 0 ? (
-        <p>No mechanics found.</p>
+        <p className="text-center">No mechanics found.</p>
       ) : (
-        <ul style={{ listStyle: 'none', padding: 0 }}>
+        <Row xs={1} md={2} lg={2} className="g-4">
           {mechanics.map((mechanic, index) => (
-            <li key={index} style={{ padding: '10px', marginBottom: '10px', border: '1px solid #ccc', borderRadius: '8px' }}>
-              <p><strong>Username:</strong> {mechanic.username}</p>
-              <p><strong>Email:</strong> {mechanic.email}</p>
-            </li>
+            <Col key={index}>
+              <Card className="h-100 shadow-sm">
+                <Row className="g-0 h-100">
+                  <Col xs={4} className="d-flex align-items-center justify-content-center">
+                    <Image
+                      src={mechanic.pictureUrl || 'https://via.placeholder.com/100'}
+                      roundedCircle
+                      fluid
+                      alt="Mechanic"
+                      style={{ width: '80px', height: '80px', objectFit: 'cover' }}
+                    />
+                  </Col>
+                  <Col xs={8}>
+                    <Card.Body>
+                      <Card.Title>{mechanic.username}</Card.Title>
+                      <Card.Text>
+                        <strong>Email:</strong> {mechanic.email}
+                      </Card.Text>
+                      <Button
+                        variant="primary"
+                        onClick={() => handleBookAppointment(mechanic.username)}
+                      >
+                        Book Appointment
+                      </Button>
+                    </Card.Body>
+                  </Col>
+                </Row>
+              </Card>
+            </Col>
           ))}
-        </ul>
+        </Row>
       )}
-    </div>
+    </Container>
   );
 };
 

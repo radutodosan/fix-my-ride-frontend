@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
 import { clientLogin, mechanicLogin } from '../services/AuthService';
-import { useNavigate } from 'react-router-dom';
-import { handleApiError } from '../utils/handleApiError';
 import { useAlert } from '../contexts/AlertContext';
-import { getAccessToken, saveAccessToken, saveUsername, saveUserType } from '../utils/storageUtils';
+import { handleApiError } from '../utils/handleApiError';
+import {
+  saveAccessToken,
+  saveUsername,
+  saveUserType,
+  getAccessToken,
+} from '../utils/storageUtils';
 import { UserType } from '../types/userType';
-import Input from '../components/Input';
+import PasswordInput from '../components/PasswordInput';
 
 const LoginPage: React.FC = () => {
   const { showSuccess, showError } = useAlert();
@@ -26,65 +32,83 @@ const LoginPage: React.FC = () => {
         const response = await clientLogin({ username, password });
         saveAccessToken(response.token);
         saveUsername(response.client.username);
-
         console.log("Client: " + getAccessToken());
-      } else if (userType === UserType.MECHANIC) {
+      } else {
         const response = await mechanicLogin({ username, password });
         saveAccessToken(response.token);
-        console.log("Mechanic: " + getAccessToken());
         saveUsername(response.mechanic.username);
+        console.log("Mechanic: " + getAccessToken());
       }
+
       saveUserType(userType);
-
-      showSuccess("Login succesful!");
+      showSuccess("Login successful!");
       navigate("/");
-
-    }
-    catch (err: unknown) {
+    } catch (err: unknown) {
       const message = handleApiError(err);
       showError(message);
+      setError(message);
     }
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '50px' }}>
-      <form onSubmit={handleLogin}>
-        <h2>Login</h2>
+    <Container className="mt-5">
+      <Row className="justify-content-center">
+        <Col md={6} lg={5}>
+          <Form onSubmit={handleLogin} className="p-4 border rounded shadow-sm bg-light">
+            <h2 className="text-center mb-4">Login</h2>
 
-        {error && <p style={{ color: 'red' }}>{error}</p>}
+            {error && <Alert variant="danger">{error}</Alert>}
 
-        <Input
-          label="Username"
-          type="username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
+            <Form.Group className="mb-3" controlId="formUsername">
+              <Form.Label>Username</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter username"
+                value={username}
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                  if (error) setError('');
+                }}
+                required
+              />
+            </Form.Group>
 
-        <Input
-          label='Password'
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+            <PasswordInput
+              label="Password"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value)
+                if (error) setError('');
+              }}
+              required
+            />
 
-        <div>
-          <label>User Type</label><br />
-          <select
-            value={userType}
-            onChange={(e) => setUserType(e.target.value as UserType.CLIENT | UserType.MECHANIC)}
-            required
-            style={{ display: 'block', width: '100%', padding: '8px', marginTop: '5px', borderRadius: '4px', border: '1px solid #ccc' }}
-          >
-            <option value={UserType.CLIENT} >Client</option>
-            <option value={UserType.MECHANIC}>Mechanic</option>
-          </select>
-        </div>
+            <Form.Group className="mb-4" controlId="formUserType">
+              <Form.Label>User Type</Form.Label>
+              <Form.Select
+                value={userType}
+                onChange={(e) => {
+                  setUserType(e.target.value as UserType.CLIENT | UserType.MECHANIC);
+                  if (error) setError('');
+                }}
+                required
+              >
+                <option value={UserType.CLIENT}>Client</option>
+                <option value={UserType.MECHANIC}>Mechanic</option>
+              </Form.Select>
+            </Form.Group>
 
-        <button type="submit" style={{ marginTop: '10px' }}>Login</button>
-      </form>
-    </div>
+            <Button variant="primary" type="submit" className="w-100">
+              Login
+            </Button>
+
+            <div className="text-center mt-3">
+              Don't have an account? <Link to="/signup">Register here</Link>
+            </div>
+          </Form>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

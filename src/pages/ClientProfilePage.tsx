@@ -5,6 +5,7 @@ import { useAlert } from '../contexts/AlertContext';
 import { Car } from '../types/Car';
 import { handleApiError } from '../utils/handleApiError';
 import { UserDetails } from '../types/UserDetails';
+import ProfileContainer from '../components/ProfileContainer';
 
 
 const ClientProfilePage: React.FC = () => {
@@ -142,74 +143,22 @@ const ClientProfilePage: React.FC = () => {
 
   return (
     <div style={{ maxWidth: '700px', margin: '50px auto' }}>
-      <h2>Client Profile</h2>
-
-      {client ?
-        (
-          <div style={{ marginBottom: '30px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div>
-              <p><strong>Username:</strong> {client.username}</p>
-              <p><strong>Email:</strong> {client.email}</p>
-            </div>
-            <button
-              onClick={() => setShowEditProfile(!showEditProfile)}
-              style={{
-                padding: '8px 16px',
-                backgroundColor: '#007bff',
-                color: 'white',
-                border: 'none',
-                borderRadius: '5px'
-              }}
-            >
-              {showEditProfile ? 'Cancel' : 'Edit Profile'}
-            </button>
-            {showEditProfile && (
-              <div style={{ marginBottom: '30px', padding: '20px', border: '1px solid #ccc', borderRadius: '8px' }}>
-                <h3>Change Password</h3>
-                <form onSubmit={handleChangePassword} style={{ marginBottom: '20px' }}>
-                  <div>
-                    <label>Current Password:</label>
-                    <input type="password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} required />
-                  </div>
-                  <div>
-                    <label>New Password:</label>
-                    <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required />
-                  </div>
-                  <button type="submit" style={{ marginTop: '10px' }}>
-                    Change Password
-                  </button>
-                </form>
-
-                <h3>Change Email</h3>
-                <form onSubmit={handleChangeEmail}>
-                  <div>
-                    <label>New Email:</label>
-                    <input type="email" value={newEmail} onChange={(e) => setNewEmail(e.target.value)} required />
-                  </div>
-                  <div>
-                    <label>Current Password:</label>
-                    <input type="password" value={passwordForEmail} onChange={(e) => setPasswordForEmail(e.target.value)} required />
-                  </div>
-                  <button type="submit" style={{ marginTop: '10px' }}>
-                    Change Email
-                  </button>
-                </form>
-              </div>
-            )}
-
-          </div>
-
-        ) :
-        (
-          <p>Loading client details...</p>
-        )}
-
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h3>My Cars</h3>
-        <button onClick={() => setShowAddCarForm(!showAddCarForm)} style={{ padding: '8px 16px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '5px' }}>
-          {showAddCarForm ? 'Cancel' : 'Add Car'}
-        </button>
-      </div>
+      <ProfileContainer
+        title="Client Profile"
+        user={client}
+        showEditProfile={showEditProfile}
+        onToggleEdit={() => setShowEditProfile(!showEditProfile)}
+        currentPassword={currentPassword}
+        newPassword={newPassword}
+        passwordForEmail={passwordForEmail}
+        newEmail={newEmail}
+        setCurrentPassword={setCurrentPassword}
+        setNewPassword={setNewPassword}
+        setPasswordForEmail={setPasswordForEmail}
+        setNewEmail={setNewEmail}
+        handleChangePassword={handleChangePassword}
+        handleChangeEmail={handleChangeEmail}
+      />
 
       {showAddCarForm && (
         <form onSubmit={handleAddOrUpdateCar} style={{ marginTop: '20px', marginBottom: '20px', border: '1px solid #ccc', padding: '15px', borderRadius: '8px' }}>

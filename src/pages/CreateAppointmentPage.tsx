@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { createAppointment } from '../services/AppointmentsService';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAlert } from '../contexts/AlertContext';
 import { getClientCars } from '../services/CarsService';
 import { Car } from '../types/Car';
+import { Button, Form } from 'react-bootstrap';
+import { AxiosError } from 'axios';
 
 
 
 const CreateAppointmentPage: React.FC = () => {
-  const [mechanicUsername, setMechanicUsername] = useState('');
+  const { mechanicUsername } = useParams<{ mechanicUsername: string }>();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [appointmentDate, setAppointmentDate] = useState('');
-  const [appointmentTime, setAppointmentTime] = useState('');
   const [cars, setCars] = useState<Car[]>([]);
   const [selectedCarId, setSelectedCarId] = useState<number | null>(null);
   const { showSuccess, showError } = useAlert();
@@ -45,63 +46,83 @@ const CreateAppointmentPage: React.FC = () => {
 
     try {
       await createAppointment({
-        mechanicUsername,
+        mechanicUsername: mechanicUsername ?? '',
         title,
         description,
         appointmentDate,
-        appointmentTime,
         carDetails,
       });
 
-      showSuccess('Appointment created successfully!');
+      showSuccess("Appointment created successfully!");
       navigate('/client/appointments');
     } catch (error) {
       console.error(error);
-      showError('Failed to create appointment.');
+
+      const axiosError = error as AxiosError<{ message: string }>;
+
+      const message = axiosError.response?.data?.message || 'Failed to create appointment.';
+
+      showError(message);
     }
   };
 
   return (
-    <div style={{ maxWidth: '500px', margin: '50px auto' }}>
-      <h2>Create Appointment</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Mechanic Username:</label>
-          <input type="text" value={mechanicUsername} onChange={(e) => setMechanicUsername(e.target.value)} required />
-        </div>
-        <div>
-          <label>Title:</label>
-          <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
-        </div>
-        <div>
-          <label>Description:</label>
-          <textarea value={description} onChange={(e) => setDescription(e.target.value)} required />
-        </div>
-        <div>
-          <label>Appointment Date:</label>
-          <input type="date" value={appointmentDate} onChange={(e) => setAppointmentDate(e.target.value)} required />
-        </div>
-        <div>
-          <label>Appointment Time:</label>
-          <input type="time" value={appointmentTime} onChange={(e) => setAppointmentTime(e.target.value)} required />
-        </div>
-
-        <div>
-          <label>Select Your Car:</label>
-          <select value={selectedCarId ?? ''} onChange={(e) => setSelectedCarId(Number(e.target.value))} required>
+    <div className="container mt-5" style={{ maxWidth: '600px' }}>
+      <h2 className="mb-4">Create Appointment at: {mechanicUsername}</h2>
+      <Form onSubmit={handleSubmit} className="p-4 border rounded shadow-sm bg-light">
+        <Form.Group className="mb-3" controlId="formCar">
+          <Form.Label>Select Your Car</Form.Label>
+          <Form.Select
+            value={selectedCarId ?? ''}
+            onChange={(e) => setSelectedCarId(Number(e.target.value))}
+            required
+          >
             <option value="">Select a car</option>
             {cars.map((car) => (
               <option key={car.id} value={car.id}>
                 {car.brand} {car.model} ({car.year})
               </option>
             ))}
-          </select>
-        </div>
+          </Form.Select>
+        </Form.Group>
 
-        <button type="submit" style={{ marginTop: '20px' }}>
-          Create Appointment
-        </button>
-      </form>
+        <Form.Group className="mb-3" controlId="formTitle">
+          <Form.Label>Title</Form.Label>
+          <Form.Control
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+            placeholder="Enter appointment title"
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="formDescription">
+          <Form.Label>Description</Form.Label>
+          <Form.Control
+            as="textarea"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            required
+            rows={3}
+            placeholder="Describe the issue or service needed"
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-4" controlId="formDate">
+          <Form.Label>Appointment Date</Form.Label>
+          <Form.Control
+            type="date"
+            value={appointmentDate}
+            onChange={(e) => setAppointmentDate(e.target.value)}
+            required
+          />
+        </Form.Group>
+
+        <Button type="submit" variant="primary" className="w-100">
+          Book Appointment
+        </Button>
+      </Form>
     </div>
   );
 };
