@@ -165,7 +165,20 @@ const ClientProfilePage: React.FC = () => {
         <Row className="align-items-center mb-3">
           <Col><h4>My Cars</h4></Col>
           <Col className="text-end">
-            <Button onClick={() => setShowAddCarForm(!showAddCarForm)}>
+            <Button onClick={() => {
+              setShowAddCarForm((prev) => {
+                const next = !prev;
+                if (next) {
+                  // If opening form for adding a car, reset car fields and edit mode
+                  setEditCarId(null);
+                  setBrand('');
+                  setModel('');
+                  setYear(new Date().getFullYear());
+                  setLicensePlate('');
+                }
+                return next;
+              });
+            }}>
               {showAddCarForm ? 'Cancel' : 'Add Car'}
             </Button>
           </Col>

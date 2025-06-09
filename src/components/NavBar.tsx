@@ -21,7 +21,7 @@ const Navbar: React.FC = () => {
         await mechanicLogout();
       }
       clearAuthData();
-      showInfo("Logged out succesfully!");
+      showInfo("Logged out successfully!");
       navigate('/');
     } catch (error) {
       console.error(error);
@@ -29,58 +29,93 @@ const Navbar: React.FC = () => {
     }
   };
 
+  const navStyle: React.CSSProperties = {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '12px 24px',
+    backgroundColor: '#2c3e50',
+    color: '#fff',
+    boxShadow: '0 2px 6px rgba(0,0,0,0.1)'
+  };
+
+  const linkStyle: React.CSSProperties = {
+    color: 'white',
+    textDecoration: 'none',
+    fontWeight: 500,
+    padding: '6px 10px',
+    borderRadius: '4px',
+    transition: 'background-color 0.2s ease'
+  };
+
+
+  const buttonStyle: React.CSSProperties = {
+    background: '#ecf0f1',
+    color: '#2c3e50',
+    padding: '6px 12px',
+    border: 'none',
+    borderRadius: '4px',
+    fontWeight: 500,
+    cursor: 'pointer',
+    transition: 'background-color 0.2s ease'
+  };
+
+  const buttonHoverStyle: React.CSSProperties = {
+    backgroundColor: '#bdc3c7'
+  };
 
   return (
-    <nav style={{
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      padding: '10px 20px',
-      backgroundColor: '#333',
-      color: '#fff'
-    }}>
+    <nav style={navStyle}>
       <div>
-        <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>
+        <Link to="/" style={{ ...linkStyle, fontSize: '1.25rem' }}>
           FixMyRide
         </Link>
       </div>
 
-      <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
-        {accessToken && (
+      <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+        {accessToken && userType === UserType.CLIENT && (
           <>
-            {userType === UserType.CLIENT && (
-              <>
-                <Link to="/client/appointments" style={{ color: 'white', textDecoration: 'none' }}>Appointments</Link>
-                <Link to={`/client/profile/${username}`} style={{ color: 'white', textDecoration: 'none' }}>Profile</Link>
-                <Link to="/client/mechanics" style={{ color: 'white', textDecoration: 'none' }}>Mechanics</Link>
-              </>
-            )}
-            {userType === UserType.MECHANIC && (
-              <>
-                <Link to="/mechanic/appointments" style={{ color: 'white', textDecoration: 'none' }}>Appointments</Link>
-                <Link to={`/mechanic/profile/${username}`} style={{ color: 'white', textDecoration: 'none' }}>Profile</Link>
-              </>
-            )}
-
+            <Link to="/client/appointments" className="nav-link">
+              Appointments
+            </Link>
+            <Link to="/client/mechanics" className="nav-link">
+              Mechanics
+            </Link>
+            <Link to={`/client/profile/${username}`} className="nav-link">
+              Profile
+            </Link>
+          </>
+        )}
+        {accessToken && userType === UserType.MECHANIC && (
+          <>
+            <Link to="/mechanic/appointments" className="nav-link">
+              Appointments
+            </Link>
+            <Link to={`/mechanic/profile/${username}`} className="nav-link">
+              Profile
+            </Link>
           </>
         )}
 
-        {accessToken ?
-          (
-            <button onClick={handleLogout} style={{ background: 'white', color: '#333', padding: '5px 10px', borderRadius: '5px' }}>
-              Logout
-            </button>
-          ) :
-          (
-            <>
-              <Link to="/login" style={{ background: 'white', color: '#333', padding: '5px 10px', borderRadius: '5px', textDecoration: 'none' }}>
-                Login
-              </Link>
-              <Link to="/signup" style={{ background: 'white', color: '#333', padding: '5px 10px', borderRadius: '5px', textDecoration: 'none' }}>
-                Sign Up
-              </Link>
-            </>
-          )}
+        {accessToken ? (
+          <button
+            onClick={handleLogout}
+            style={buttonStyle}
+            onMouseOver={e => Object.assign(e.currentTarget.style, buttonHoverStyle)}
+            onMouseOut={e => Object.assign(e.currentTarget.style, buttonStyle)}
+          >
+            Logout
+          </button>
+        ) : (
+          <>
+            <Link to="/login" style={buttonStyle as React.CSSProperties} onMouseOver={e => Object.assign(e.currentTarget.style, buttonHoverStyle)} onMouseOut={e => Object.assign(e.currentTarget.style, buttonStyle)}>
+              Login
+            </Link>
+            <Link to="/signup" style={buttonStyle as React.CSSProperties} onMouseOver={e => Object.assign(e.currentTarget.style, buttonHoverStyle)} onMouseOut={e => Object.assign(e.currentTarget.style, buttonStyle)}>
+              Sign Up
+            </Link>
+          </>
+        )}
       </div>
     </nav>
   );
