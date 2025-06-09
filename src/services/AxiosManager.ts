@@ -3,12 +3,13 @@ import { ApiServiceType } from '../types/apiServiceType';
 import { clearAuthData, getAccessToken, getUserType, saveAccessToken } from '../utils/storageUtils';
 import { UserType } from '../types/userType';
 
-const BASE_URLS: Record<ApiServiceType, string> = {
-  [ApiServiceType.CLIENT]: 'http://localhost:8080/clients',
-  [ApiServiceType.MECHANIC]: 'http://localhost:8080/mechanics',
-  [ApiServiceType.APPOINTMENT]: 'http://localhost:8080/appointments',
-};
+const BASE = "http://91.99.141.121:8080";
 
+const BASE_URLS: Record<ApiServiceType, string> = {
+  [ApiServiceType.CLIENT]: `${BASE}/clients`,
+  [ApiServiceType.MECHANIC]: `${BASE}/mechanics`,
+  [ApiServiceType.APPOINTMENT]: `${BASE}/appointments`,
+};
 
 // axios for requests WITHOUT authorization needed
 export const createAxiosPublicManager = (serviceType: ApiServiceType) => {
