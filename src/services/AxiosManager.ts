@@ -4,10 +4,11 @@ import { clearAuthData, getAccessToken, getUserType, saveAccessToken } from '../
 import { UserType } from '../types/userType';
 
 const BASE_URLS: Record<ApiServiceType, string> = {
-  [ApiServiceType.CLIENT]: 'http://localhost:8081',
-  [ApiServiceType.MECHANIC]: 'http://localhost:8082',
-  [ApiServiceType.APPOINTMENT]: 'http://localhost:8083',
+  [ApiServiceType.CLIENT]: 'http://localhost:8080/clients',
+  [ApiServiceType.MECHANIC]: 'http://localhost:8080/mechanics',
+  [ApiServiceType.APPOINTMENT]: 'http://localhost:8080/appointments',
 };
+
 
 // axios for requests WITHOUT authorization needed
 export const createAxiosPublicManager = (serviceType: ApiServiceType) => {
@@ -69,11 +70,11 @@ export const createAxiosPrivateManager = (serviceType: ApiServiceType) => {
 
           if (userType === UserType.CLIENT) {
             const CLIENT_URL = createAxiosPublicManager(ApiServiceType.CLIENT);
-            const response = await CLIENT_URL.post('/auth/clients/refresh-token');
+            const response = await CLIENT_URL.post('/auth/refresh-token');
             newAccessToken = response.data.data.accessToken;
           } else if (userType === UserType.MECHANIC) {
             const MECHANIC_URL = createAxiosPublicManager(ApiServiceType.MECHANIC);
-            const response = await MECHANIC_URL.post('/auth/mechanics/refresh-token');
+            const response = await MECHANIC_URL.post('/auth/refresh-token');
             newAccessToken = response.data.data.accessToken;
           } else {
             throw new Error('Unknown user type for refresh');

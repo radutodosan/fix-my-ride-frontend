@@ -6,7 +6,7 @@ import {
   Col,
   Image,
   Badge,
-  Alert,
+  Spinner,
 } from 'react-bootstrap';
 import { Appointment } from '../types/Appointment';
 import { UserType } from '../types/userType';
@@ -39,7 +39,10 @@ const AppointmentListContainer: React.FC<AppointmentListContainerProps> = ({
       <h2 className="text-center mb-4">My Appointments</h2>
 
       {appointments.length === 0 ? (
-        <Alert variant="info" className="text-center">No appointments found.</Alert>
+        // <Alert variant="info" className="text-center">No appointments found.</Alert>
+        <div className="d-flex justify-content-center my-5">
+          <Spinner animation="border" role="status" />
+        </div>
       ) : (
         appointments.map((appointment) => (
           <Card key={appointment.id} className="mb-4 shadow-sm">

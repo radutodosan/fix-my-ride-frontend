@@ -4,7 +4,7 @@ import { getAllMechanics } from '../services/ClientsService';
 import { UserDetails } from '../types/UserDetails';
 import { handleApiError } from '../utils/handleApiError';
 import { useNavigate } from 'react-router-dom';
-import { Button, Card, Col, Container, Row, Image } from 'react-bootstrap';
+import { Button, Card, Col, Container, Row, Image, Spinner } from 'react-bootstrap';
 
 const ClientMechanicsPage: React.FC = () => {
   const [mechanics, setMechanics] = useState<UserDetails[]>([]);
@@ -35,7 +35,9 @@ const ClientMechanicsPage: React.FC = () => {
     <Container className="mt-5">
       <h2 className="mb-4 text-center">Available Mechanics</h2>
       {mechanics.length === 0 ? (
-        <p className="text-center">No mechanics found.</p>
+        <div className="d-flex justify-content-center my-5">
+          <Spinner animation="border" role="status" />
+        </div>
       ) : (
         <Row xs={1} md={2} lg={2} className="g-4">
           {mechanics.map((mechanic, index) => (

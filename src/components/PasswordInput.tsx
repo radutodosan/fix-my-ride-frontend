@@ -42,6 +42,7 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
             padding: '0.375rem 0.75rem',
             zIndex: 2,
           }}
+          tabIndex={-1}
         >
           {showPassword ? <EyeSlash /> : <Eye />}
         </Button>
